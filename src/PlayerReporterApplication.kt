@@ -40,6 +40,7 @@ fun Application.main() {
     }
     routing {
         get("/") {
+            println("Request received ($this)")
             call.respond(players())
         }
     }
