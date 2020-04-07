@@ -18,7 +18,7 @@ fun main() {
 }
 
 private fun sleepFiveMinutes() {
-    Thread.sleep(envLong("SLEEP_MINUTES"))
+    Thread.sleep(envInt("SLEEP_MINUTES") * 60000L)
 }
 
 fun envLong(name: String): Long = env(name).toLong()
@@ -64,7 +64,7 @@ private fun relevantPlayerFiles(cachedPlayers: List<CachePlayer>): Sequence<File
                 .filter { it.lastModified() > loginDate() }
                 .filter { cachedPlayers.any { p -> p.uuid == uuid(it) } }
 
-private fun loginDate() = envInt("LOGIN_DATE") * 60000
+private fun loginDate() = envLong("LOGIN_DATE")
 
 private fun pos(input: NbtFile) = input.compound["Pos"] as NbtList<NbtDouble>
 
