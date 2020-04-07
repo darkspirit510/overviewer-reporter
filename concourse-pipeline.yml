@@ -35,11 +35,9 @@ jobs:
             args:
               - -ecu
               - |
-                PWD=$(pwd)
                 cd source-code/
                 ./gradlew jar --no-daemon
-                cp build/libs/overviewer-reporter.jar $PWD/artifacts
-
+                cp build/libs/overviewer-reporter.jar ../reporter/
       - task: deploy
         params:
           CAPROVER_URL: ((caprover_url))
@@ -49,16 +47,16 @@ jobs:
           <<: *image-caprover-image
           inputs:
             - name: source-code
-            - name: artifacts
+            - name: reporter
           run:
             path: bash
             args:
               - -ecu
               - |
-                cp artifacts/overviewer-reporter.jar source-code/
+                cp reporter/overviewer-reporter.jar source-code/
                 cd source-code/
 
-                tar -cf overviewer-reporter.jar./overviewer-reporter.tar source-code/Dockerfile source-code/captain-definition
+                tar -cf ./overviewer-reporter.tar overviewer-reporter.jar Dockerfile captain-definition
                 caprover deploy -t ./overviewer-reporter.tar
 
 resources:

@@ -20,7 +20,7 @@ sourceSets {
 }
 
 dependencies {
-    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.8'
+    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.10.3'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.71"
     compile "br.com.gamemods:nbt-manipulator:2.0.0"
     compile "com.github.t9t.minecraft-rcon-client:minecraft-rcon-client:1.0.0"
