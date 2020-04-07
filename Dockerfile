@@ -8,10 +8,8 @@ RUN apt-get update && \
         procps && \
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /tmp/overviewer-reporter
-RUN git clone https://github.com/darkspirit510/overviewer-reporter . && \
-    ./gradlew jar
+ADD overviewer-reporter.jar /
 
 USER www-data
 
-ENTRYPOINT ["java", "-jar", "build/libs/overviewer-reporter.jar"]
+ENTRYPOINT ["java", "-jar", "overviewer-reporter.jar"]

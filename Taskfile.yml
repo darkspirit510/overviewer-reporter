@@ -1,0 +1,9 @@
+# https://taskfile.dev
+
+version: '2'
+
+tasks:
+  fly-pipeline:
+    cmds:
+      - fly -t d510 sync
+      - fly -t d510 set-pipeline -c concourse-pipeline.yml -p overviewer-reporter --load-vars-from secrets.yml -n
