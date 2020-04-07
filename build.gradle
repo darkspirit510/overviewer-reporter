@@ -27,6 +27,7 @@ dependencies {
 }
 
 jar {
+    archivesBaseName = "overviewer-reporter"
     manifest {
         attributes 'Main-Class': 'de.darkspirit510.overviewer.PlayerReporterKt'
     }

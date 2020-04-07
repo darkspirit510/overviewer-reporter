@@ -9,12 +9,37 @@ image-caprover-image: &image-caprover-image
       insecure_registries:
         - "srv-captain--docker-registry:5000"
 
+image-openjdk-8: &image-openjdk-8
+  platform: linux
+  image_resource:
+    type: docker-image
+    source:
+      repository: openjdk
+      tag: 8
+
 jobs:
   - name: deploy-reporter
     serial: true
     plan:
       - get: source-code
         trigger: true
+      - task: build
+        config:
+          <<: *image-openjdk-8
+          inputs:
+            - name: source-code
+          outputs:
+            - name: reporter
+          run:
+            path: bash
+            args:
+              - -ecu
+              - |
+                PWD=$(pwd)
+                cd source-code/
+                ./gradlew jar --no-daemon
+                cp build/libs/overviewer-reporter.jar $PWD/artifacts
+
       - task: deploy
         params:
           CAPROVER_URL: ((caprover_url))
@@ -23,16 +48,15 @@ jobs:
         config:
           <<: *image-caprover-image
           inputs:
-            - name: docker-source
+            - name: source-code
+            - name: artifacts
           run:
             path: bash
             args:
-              - -ecux
+              - -ecu
               - |
+                cp artifacts/overviewer-reporter.jar source-code/
                 cd source-code/
-                ./gradlew jar
-
-                cp build/libs/overviewer-reporter.jar .
 
                 tar -cf overviewer-reporter.jar./overviewer-reporter.tar source-code/Dockerfile source-code/captain-definition
                 caprover deploy -t ./overviewer-reporter.tar
