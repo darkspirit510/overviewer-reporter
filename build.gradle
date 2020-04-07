@@ -1,12 +1,9 @@
 buildscript {
-    ext.jackson_version = '2.9.8'
-
     repositories {
         jcenter()
     }
 
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.71"
     }
 }
@@ -14,35 +11,28 @@ buildscript {
 apply plugin: 'kotlin'
 apply plugin: 'application'
 
-mainClassName = "io.ktor.server.netty.EngineMain"
-apply plugin: 'com.github.johnrengelman.shadow'
-
 repositories {
     jcenter()
-
-    maven {
-        url "https://dl.bintray.com/kotlin/ktor"
-    }
 }
 
 sourceSets {
     main.kotlin.srcDirs = ['src']
-    main.resources.srcDirs = ['resources']
 }
-
 
 dependencies {
+    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.8'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.71"
-    compile "io.ktor:ktor-server-netty:1.3.2"
-    compile "io.ktor:ktor-jackson:1.3.2"
     compile "br.com.gamemods:nbt-manipulator:2.0.0"
-
-    testCompile "io.ktor:ktor-server-tests:1.3.2"
+    compile "com.github.t9t.minecraft-rcon-client:minecraft-rcon-client:1.0.0"
 }
 
-
-shadowJar {
-    baseName = 'overviewer-reporter'
-    classifier = null
-    version = null
+jar {
+    manifest {
+        attributes 'Main-Class': 'de.darkspirit510.overviewer.PlayerReporterKt'
+    }
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
 }

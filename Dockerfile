@@ -10,7 +10,7 @@ RUN apt-get update && \
 
 WORKDIR /tmp/overviewer-reporter
 RUN git clone https://github.com/darkspirit510/overviewer-reporter . && \
-    ./gradlew shadowJar
+    ./gradlew jar
 
 USER www-data
 
