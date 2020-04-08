@@ -11,6 +11,7 @@ import java.io.File
 
 fun main() {
     while (true) {
+        println("Writing fresh data...")
         sendSaveAllCommand()
         writePlayerPositionsJson()
         sleepFiveMinutes()
